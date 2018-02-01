@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-01-31 19:26:38
+Date: 2018-02-01 17:03:16
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -27,11 +27,13 @@ CREATE TABLE `cart` (
   `num` int(11) NOT NULL COMMENT '数量',
   `uid` int(11) NOT NULL COMMENT '用户id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of cart
 -- ----------------------------
+INSERT INTO `cart` VALUES ('1', '1', '菜品一', '77', '2', '38');
+INSERT INTO `cart` VALUES ('2', '2', '菜品二', '66', '3', '38');
 
 -- ----------------------------
 -- Table structure for `comment`
@@ -122,19 +124,10 @@ CREATE TABLE `user` (
   `password` varchar(255) NOT NULL COMMENT '密码',
   `permission` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=35 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('1', 'nie', '男', '11', '123', '0');
-INSERT INTO `user` VALUES ('2', 'nie', '男', '11', '123', '0');
-INSERT INTO `user` VALUES ('3', 'nie', '男', '11', '123', '0');
-INSERT INTO `user` VALUES ('4', 'nie', '男', '11', '123', '0');
-INSERT INTO `user` VALUES ('14', 'nie', '男', '111', '123', '0');
-INSERT INTO `user` VALUES ('15', 'nie', '男', '111', '123', '0');
-INSERT INTO `user` VALUES ('16', 'nie', '男', '111', '123', '0');
-INSERT INTO `user` VALUES ('17', 'nie', '男', '111', '123', '0');
-INSERT INTO `user` VALUES ('18', 'nie', '男', '111', '123', '0');
-INSERT INTO `user` VALUES ('33', '1', '男', '18846792935', '1', '0');
-INSERT INTO `user` VALUES ('34', '1', '男', '18846792935', '1', '0');
+INSERT INTO `user` VALUES ('38', '聂', '男', '18846792935', '123', '0');
+INSERT INTO `user` VALUES ('39', '王', '男', '18846782835', '123', '0');
