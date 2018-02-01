@@ -93,4 +93,17 @@ class Welcome extends CI_Controller
             echo $result;
         }
     }
+    //获取购物车菜品总数量
+    public function getCartDishesNum(){
+        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+        header("Access-Control-Allow-Origin: *");
+        $params = file_get_contents("php://input");
+        $params1 = json_decode($params);
+        if($params1){
+            $uid = $params1->uid;
+            $result = $this->user_model->get_cart_dishes_num($uid);
+            //var_dump($result);
+            echo $result;
+        }
+    }
 }

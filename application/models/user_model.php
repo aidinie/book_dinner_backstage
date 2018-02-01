@@ -77,4 +77,10 @@ class User_model extends CI_Model
             echo json_encode($arr);
         }
     }
+    //Select Sum(num) as "ScrTotal" from cart where uid=38
+    public function get_cart_dishes_num($uid){
+        $sql = "Select Sum(num) as total from cart where uid=$uid";
+        $num = $this->db->query($sql)->row();
+        echo json_encode($num);
+    }
 }
