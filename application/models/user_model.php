@@ -78,9 +78,54 @@ class User_model extends CI_Model
         }
     }
     //Select Sum(num) as "ScrTotal" from cart where uid=38
+    //查询购物车商品总数量
     public function get_cart_dishes_num($uid){
         $sql = "Select Sum(num) as total from cart where uid=$uid";
         $num = $this->db->query($sql)->row();
         echo json_encode($num);
     }
+    public function insert_card($did,$dname,$price,$num,$uid){
+        $result = $this->db->get_where('cart', array('did' => $did))->row();
+        if($result){
+            //$num += $result->num;
+//            $this->db->set('did', $did);
+//            $bool = $this->db->insert('cart');
+            $sql = "Select num from cart where did=$did";
+            $originalStr = $this->db->query($sql)->row();
+            //echo $original;
+            $original = $originalStr->num;
+            $totalNum = (int)$original + $num;
+            $data = array(
+                'num' => $totalNum,
+            );
+            $this->db->where('did', $did);
+            $bool = $this->db->update('cart', $data);
+            //$bool = $this->db->update('cart',$totalNum, array('did' => $did));
+            if ($bool) {
+                $arr = array('flag' => 'success');
+                echo json_encode($arr);
+            } else {
+                $arr = array('flag' => 'error');
+                echo json_encode($arr);
+            }
+
+        }else{
+            $data = array(
+                'did' => $did,
+                'dname' => $dname,
+                'price' => $price,
+                'num' => $num,
+                'uid' => $uid
+            );
+            $bool = $this->db->insert('cart', $data);
+            if ($bool) {
+                $arr = array('flag' => 'success');
+                echo json_encode($arr);
+            } else {
+                $arr = array('flag' => 'error');
+                echo json_encode($arr);
+            }
+        }
+    }
+
 }

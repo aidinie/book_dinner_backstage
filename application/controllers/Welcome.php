@@ -14,16 +14,41 @@ class Welcome extends CI_Controller
         $this->load->view('welcome_message');
     }
     //获取菜品详情
-    public function detail()
+    public function dishDetail()
     {
         header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
         header("Access-Control-Allow-Origin: *");
-        $dish = $this->user_model->get_by_id($_GET['id']);
-        if ($dish) {
-            echo $dish;
-            //$this->load->view('single', array('product'=>$product));
+        $params = file_get_contents("php://input");
+        $params1 = json_decode($params);
+        if($params1){
+            $id = $params1->id;
+            $dish = $this->user_model->get_by_id($id);
+            if ($dish) {
+                echo $dish;
+                //$this->load->view('single', array('product'=>$product));
+            }
         }
+
     }
+    //加入购物车
+    public function insertCart()
+    {
+        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+        header("Access-Control-Allow-Origin: *");
+        $params = file_get_contents("php://input");
+        $params1 = json_decode($params);
+        if($params1){
+            $did = $params1->id;
+            $dname = $params1->name;
+            $price = $params1->price;
+            $num = $params1->num;
+            $uid = $params1->uid;
+            $result = $this->user_model->insert_card($did,$dname,$price,$num,$uid);
+            echo $result;
+        }
+
+    }
+
     //注册
     public function register()
     {
