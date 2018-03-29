@@ -84,13 +84,11 @@ class User_model extends CI_Model
         $num = $this->db->query($sql)->row();
         echo json_encode($num);
     }
+    //插入或更新购物车
     public function insert_card($did,$dname,$price,$num,$uid){
-        $result = $this->db->get_where('cart', array('did' => $did))->row();
+        $result = $this->db->get_where('cart', array('did' => $did,'uid' =>$uid))->row();
         if($result){
-            //$num += $result->num;
-//            $this->db->set('did', $did);
-//            $bool = $this->db->insert('cart');
-            $sql = "Select num from cart where did=$did";
+            $sql = "Select num from cart where did=$did AND uid=$uid";
             $originalStr = $this->db->query($sql)->row();
             //echo $original;
             $original = $originalStr->num;
@@ -98,9 +96,10 @@ class User_model extends CI_Model
             $data = array(
                 'num' => $totalNum,
             );
-            $this->db->where('did', $did);
-            $bool = $this->db->update('cart', $data);
-            //$bool = $this->db->update('cart',$totalNum, array('did' => $did));
+            $where = "did = $did AND uid = $uid";
+            $str = $this->db->update_string('cart', $data, $where);
+            //相当于 UPDATE cart SET num=$num WHERE did = $did AND uid = $uid
+            $bool = $this->db->query($str);
             if ($bool) {
                 $arr = array('flag' => 'success');
                 echo json_encode($arr);
@@ -125,6 +124,93 @@ class User_model extends CI_Model
                 $arr = array('flag' => 'error');
                 echo json_encode($arr);
             }
+        }
+    }
+    //更新购物车商品数量
+    public function update_card($did,$num,$uid){
+        $data = array(
+            'num' => $num,
+        );
+        $where = "did = $did AND uid = $uid";
+        $str = $this->db->update_string('cart', $data, $where);
+        //相当于 UPDATE cart SET num=$num WHERE did = $did AND uid = $uid
+        $bool = $this->db->query($str);
+        if ($bool) {
+            $arr = array('flag' => 'success');
+            echo json_encode($arr);
+        } else {
+            $arr = array('flag' => 'error');
+            echo json_encode($arr);
+        }
+
+    }
+    //删除购物车某条记录
+    public function delete_card_by_id($id){
+        $bool = $this->db->delete('cart', array('id' => $id));
+        if ($bool) {
+            $arr = array('flag' => 'success');
+            echo json_encode($arr);
+        } else {
+            $arr = array('flag' => 'error');
+            echo json_encode($arr);
+        }
+    }
+    //插入收货信息
+    public function insert_receipt_info($name,$phone,$address,$uid){
+        $data = array(
+            'name' => $name,
+            'phone' => $phone,
+            'address' => $address,
+            'uid' => $uid
+        );
+        $bool = $this->db->insert('receipt', $data);
+        if ($bool) {
+            $arr = array('flag' => 'success');
+            echo json_encode($arr);
+        } else {
+            $arr = array('flag' => 'error');
+            echo json_encode($arr);
+        }
+    }
+    //获取收货信息
+    public function get_address_info($uid){
+        $result = $this->db->get_where('receipt',array('uid' => $uid)) ->result();
+        if($result){
+            echo json_encode($result);
+        } else {
+            $arr = array('flag' => 'empty');
+            echo json_encode($arr);
+        }
+
+    }
+    //更新收货信息
+    public function update_address_info($id,$uid,$name,$phone,$address){
+        $data = array(
+            'name' => $name,
+            'phone' => $phone,
+            'address' => $address,
+        );
+        $where = "id = $id AND uid = $uid";
+        $str = $this->db->update_string('receipt', $data, $where);
+        //相当于 UPDATE cart SET num=$num WHERE did = $did AND uid = $uid
+        $bool = $this->db->query($str);
+        if ($bool) {
+            $arr = array('flag' => 'success');
+            echo json_encode($arr);
+        } else {
+            $arr = array('flag' => 'error');
+            echo json_encode($arr);
+        }
+    }
+
+    public function delete_address_info($id,$uid){
+        $bool = $this->db->delete('receipt', array('id' => $id,'uid' => $uid));
+        if ($bool) {
+            $arr = array('flag' => 'success');
+            echo json_encode($arr);
+        } else {
+            $arr = array('flag' => 'error');
+            echo json_encode($arr);
         }
     }
 
