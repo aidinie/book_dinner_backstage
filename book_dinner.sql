@@ -1,7 +1,7 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : localhost_3306
+Source Server         : test
 Source Server Version : 50505
 Source Host           : localhost:3306
 Source Database       : book_dinner
@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 50505
 File Encoding         : 65001
 
-Date: 2018-02-01 17:03:16
+Date: 2018-04-04 09:49:18
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -27,13 +27,14 @@ CREATE TABLE `cart` (
   `num` int(11) NOT NULL COMMENT '数量',
   `uid` int(11) NOT NULL COMMENT '用户id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of cart
 -- ----------------------------
-INSERT INTO `cart` VALUES ('1', '1', '菜品一', '77', '2', '38');
-INSERT INTO `cart` VALUES ('2', '2', '菜品二', '66', '3', '38');
+INSERT INTO `cart` VALUES ('34', '4', '菜品四', '89', '8', '38');
+INSERT INTO `cart` VALUES ('36', '4', '菜品四', '89', '3', '40');
+INSERT INTO `cart` VALUES ('37', '5', '菜品五', '90', '9', '40');
 
 -- ----------------------------
 -- Table structure for `comment`
@@ -113,6 +114,25 @@ CREATE TABLE `order_detail` (
 -- ----------------------------
 
 -- ----------------------------
+-- Table structure for `receipt`
+-- ----------------------------
+DROP TABLE IF EXISTS `receipt`;
+CREATE TABLE `receipt` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `address` varchar(255) NOT NULL COMMENT '收货地址',
+  `phone` varchar(255) NOT NULL COMMENT '收货手机号',
+  `uid` int(11) NOT NULL COMMENT '用户id',
+  `name` varchar(255) NOT NULL COMMENT '收货人姓名',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=utf8;
+
+-- ----------------------------
+-- Records of receipt
+-- ----------------------------
+INSERT INTO `receipt` VALUES ('2', '西城区1331', '13034563608', '40', '4646w');
+INSERT INTO `receipt` VALUES ('5', '西城区1331', '13034563608', '40', '4646f4');
+
+-- ----------------------------
 -- Table structure for `user`
 -- ----------------------------
 DROP TABLE IF EXISTS `user`;
@@ -124,10 +144,10 @@ CREATE TABLE `user` (
   `password` varchar(255) NOT NULL COMMENT '密码',
   `permission` int(11) NOT NULL DEFAULT '0',
   PRIMARY KEY (`uid`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=41 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Records of user
 -- ----------------------------
-INSERT INTO `user` VALUES ('38', '聂', '男', '18846792935', '123', '0');
-INSERT INTO `user` VALUES ('39', '王', '男', '18846782835', '123', '0');
+INSERT INTO `user` VALUES ('38', '聂', '男', '18846792935', '123', '1');
+INSERT INTO `user` VALUES ('40', '聂哈哈', '男', '18845071994', '123', '0');
