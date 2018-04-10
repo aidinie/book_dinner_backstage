@@ -202,7 +202,7 @@ class User_model extends CI_Model
             echo json_encode($arr);
         }
     }
-
+    //删除收货地址
     public function delete_address_info($id,$uid){
         $bool = $this->db->delete('receipt', array('id' => $id,'uid' => $uid));
         if ($bool) {
@@ -212,6 +212,80 @@ class User_model extends CI_Model
             $arr = array('flag' => 'error');
             echo json_encode($arr);
         }
+    }
+    //下单后操作
+    public function place_an_order($time,$name,$phone,$total,$address,$uid,$data){
+        $arr = array(
+            'time' => $time,
+            'phone' => $phone,
+            'address' => $address,
+            'name' => $name,
+            'total' => $total,
+            'uid' => $uid
+        );
+        //插入订单表
+        $bool1 = $this->db->insert('order', $arr);
+        if($bool1){
+            $dataArr = array();
+            for($i = 0; $i < sizeof($data); $i++){
+                $arr = array();
+                foreach($data[$i] as $key => $val){
+                    $arr[$key] = $val;
+                }
+                array_push($dataArr,$arr);
+            }
+            //插入订单详情表
+            $bool2 = $this->db->insert_batch('order_detail', $dataArr);
+            if($bool2){
+                //下单后删除该用户购物车信息
+                $bool3 = $this->db->delete('cart', array('uid' => $uid));
+                if($bool3){
+                    echo json_encode(array('flag'=>"success"));
+                }else{
+                    echo json_encode(array('flag'=>"error"));
+                }
+            }else{
+                echo json_encode(array('flag'=>"error"));
+            }
+        }else{
+            echo json_encode(array('flag'=>"error"));
+        }
+
+    }
+    //获取订单信息
+    public function get_order($uid){
+        $result = $this->db->get_where('order',array('uid' => $uid)) ->result();
+        if($result){
+            echo json_encode($result);
+        } else {
+            $arr = array('flag' => 'empty');
+            echo json_encode($arr);
+        }
+
+    }
+    //获取订单信息
+    public function get_order_detail($uid,$time){
+        $result = $this->db->get_where('order_detail',array('uid' => $uid,'time' => $time)) ->result();
+        if($result){
+            echo json_encode($result);
+        } else {
+            $arr = array('flag' => 'empty');
+            echo json_encode($arr);
+        }
+
+    }
+    //插入评论
+    public function add_comment($uid,$name,$did,$comment,$distribution,$packing,$taste){
+        $data = array('uid' => $uid,'name' => $name,'did' => $did, 'comment' => $comment,'distribution' => $distribution,'packing' => $packing,'taste' => $taste );
+        $result = $this->db->insert('comment',$data);
+        if($result){
+            $arr = array('flag' => 'success');
+            echo json_encode($arr);
+        } else {
+            $arr = array('flag' => 'empty');
+            echo json_encode($arr);
+        }
+
     }
 
 }

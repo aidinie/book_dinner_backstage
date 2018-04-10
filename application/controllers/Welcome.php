@@ -216,4 +216,69 @@ class Welcome extends CI_Controller
             echo $result;
         }
     }
+    //点击下单
+    public function placeAnOrder(){
+        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+        header("Access-Control-Allow-Origin: *");
+        $params = file_get_contents("php://input");
+        $params1 = json_decode($params);
+        if($params1){
+            $time = $params1->time;
+            $name = $params1->name;
+            $phone = $params1->phone;
+            $total = $params1->total;
+            $address = $params1->address;
+            $uid = $params1->uid;
+            $data = $params1->data;
+            for($i = 0; $i<sizeof($data); $i++){
+                $data[$i]->time = $time;
+                unset($data[$i]->id);
+            }
+            $result = $this->user_model->place_an_order($time,$name,$phone,$total,$address,$uid,$data);
+            echo $result;
+        }
+    }
+    //获取订单列表
+    public function getOrder(){
+        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+        header("Access-Control-Allow-Origin: *");
+        $params = file_get_contents("php://input");
+        $params1 = json_decode($params);
+        if($params1){
+            $uid = $params1->uid;
+            $result = $this->user_model->get_order($uid);
+            echo $result;
+        }
+    }
+    //获取订单详情
+    public function getOrderDetail(){
+        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+        header("Access-Control-Allow-Origin: *");
+        $params = file_get_contents("php://input");
+        $params1 = json_decode($params);
+        if($params1){
+            $uid = $params1->uid;
+            $time = $params1->time;
+            $result = $this->user_model->get_order_detail($uid,$time);
+            echo $result;
+        }
+    }
+    public function addComment(){
+        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+        header("Access-Control-Allow-Origin: *");
+        $params = file_get_contents("php://input");
+        $params1 = json_decode($params);
+        if($params1){
+            $uid = $params1->uid;
+            $name = $params1->name;
+            $did = $params1->did;
+            $comment = $params1->comment;
+            $distribution = $params1->distribution;
+            $packing = $params1->packing;
+            $taste = $params1->taste;
+            $result = $this->user_model->add_comment($uid,$name,$did,$comment,$distribution,$packing,$taste);
+            echo $result;
+        }
+    }
+
 }
