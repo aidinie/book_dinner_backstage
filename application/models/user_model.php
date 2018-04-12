@@ -42,6 +42,9 @@ class User_model extends CI_Model
         $dishes = $this->db->get_where('dish', array('category' => $category))->result();
         if ($dishes) {
             echo json_encode($dishes);
+        }else {
+            $arr = array('flag' => 'empty');
+            echo json_encode($arr);
         }
     }
     //查询手机是否被注册
@@ -90,7 +93,6 @@ class User_model extends CI_Model
         if($result){
             $sql = "Select num from cart where did=$did AND uid=$uid";
             $originalStr = $this->db->query($sql)->row();
-            //echo $original;
             $original = $originalStr->num;
             $totalNum = (int)$original + $num;
             $data = array(
@@ -283,6 +285,82 @@ class User_model extends CI_Model
             echo json_encode($arr);
         } else {
             $arr = array('flag' => 'empty');
+            echo json_encode($arr);
+        }
+
+    }
+    //获取评论
+    public function get_comment($did){
+        $result = $this->db->get_where('comment',array('did' => $did)) ->result();
+        if($result){
+            echo json_encode($result);
+        } else {
+            $arr = array('flag' => 'empty');
+            echo json_encode($arr);
+        }
+
+    }
+    //更新菜品信息
+    public function update_dish_info($did,$name,$price,$sale,$describe){
+        $data = array(
+            'name' => $name,
+            'price' => $price,
+            'sale' => $sale,
+            'describe' => $describe
+        );
+        $where = "did = $did";
+        $str = $this->db->update_string('dish', $data, $where);
+        $bool = $this->db->query($str);
+        if ($bool) {
+            $arr = array('flag' => 'success');
+            echo json_encode($arr);
+        } else {
+            $arr = array('flag' => 'error');
+            echo json_encode($arr);
+        }
+    }
+    //删除菜品
+    public function delete_dish($did){
+        $bool = $this->db->delete('dish', array('did' => $did));
+        if ($bool) {
+            $arr = array('flag' => 'success');
+            echo json_encode($arr);
+        } else {
+            $arr = array('flag' => 'error');
+            echo json_encode($arr);
+        }
+    }
+    //获取用户列表
+    public function get_user_list(){
+        $query = 'select name,sex,phone,permission,uid from user';
+        $arr = $this->db->query($query)->result();
+        echo json_encode($arr);
+    }
+    //设置用户权限
+    public function set_permission($uid,$permission){
+        $data = array(
+            'permission' => $permission,
+        );
+        $where = "uid = $uid";
+        $str = $this->db->update_string('user', $data, $where);
+        $bool = $this->db->query($str);
+        if ($bool) {
+            $arr = array('flag' => 'success');
+            echo json_encode($arr);
+        } else {
+            $arr = array('flag' => 'error');
+            echo json_encode($arr);
+        }
+
+    }
+    //删除用户
+    public function delete_user($uid){
+        $bool = $this->db->delete('user', array('uid' => $uid));
+        if ($bool) {
+            $arr = array('flag' => 'success');
+            echo json_encode($arr);
+        } else {
+            $arr = array('flag' => 'error');
             echo json_encode($arr);
         }
 
