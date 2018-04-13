@@ -355,6 +355,7 @@ class Welcome extends CI_Controller
         }
 
     }
+    //图片上传
     public function do_put_good()
     {
         header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
@@ -373,5 +374,23 @@ class Welcome extends CI_Controller
         if($bool){
             echo $_FILES['file']['name'];
         }
+    }
+    //插入菜品
+    public function insertDish(){
+        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+        header("Access-Control-Allow-Origin: *");
+        $params = file_get_contents("php://input");
+        $params1 = json_decode($params);
+        if($params1){
+            $category = $params1->category;
+            $describe = $params1->describe;
+            $imgPath = $params1->imgPath;
+            $name = $params1->name;
+            $price = $params1->price;
+            $sale = $params1->sale;
+            $result = $this->user_model->insert_dish($category,$describe,$imgPath,$name,$price,$sale);
+            echo $result;
+        }
+
     }
 }

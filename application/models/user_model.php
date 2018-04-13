@@ -363,6 +363,18 @@ class User_model extends CI_Model
             $arr = array('flag' => 'error');
             echo json_encode($arr);
         }
+    }
+    //插入菜品
+    public function insert_dish($category,$describe,$imgPath,$name,$price,$sale){
+        $data = array('category' => $category,'name' => $name,'describe' => $describe, 'imgPath' => $imgPath,'price' => $price,'sale' => $sale);
+        $result = $this->db->insert('dish',$data);
+        if($result){
+            $arr = array('flag' => 'success');
+            echo json_encode($arr);
+        } else {
+            $arr = array('flag' => 'empty');
+            echo json_encode($arr);
+        }
 
     }
 
