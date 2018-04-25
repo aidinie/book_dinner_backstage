@@ -393,4 +393,16 @@ class Welcome extends CI_Controller
         }
 
     }
+    //改变订单状态
+    public function acceptOrder(){
+        header('Access-Control-Allow-Headers: X-Requested-With, Content-Type');
+        header("Access-Control-Allow-Origin: *");
+        $params = file_get_contents("php://input");
+        $params1 = json_decode($params);
+        if($params1){
+            $oid = $params1->oid;
+            $result = $this->user_model-> accept_order($oid);
+            echo $result;
+        }
+    }
 }

@@ -256,7 +256,13 @@ class User_model extends CI_Model
     }
     //获取订单信息
     public function get_order($uid){
-        $result = $this->db->get_where('order',array('uid' => $uid)) ->result();
+        if($uid == -1){
+            $query = "select * FROM `order`";
+            //$result = $this->db->get_where('order') ->result();
+            $result = $this->db->query($query) ->result();
+        }else{
+            $result = $this->db->get_where('order',array('uid' => $uid)) ->result();
+        }
         if($result){
             echo json_encode($result);
         } else {
@@ -265,7 +271,7 @@ class User_model extends CI_Model
         }
 
     }
-    //获取订单信息
+    //获取订单详细信息
     public function get_order_detail($uid,$time){
         $result = $this->db->get_where('order_detail',array('uid' => $uid,'time' => $time)) ->result();
         if($result){
@@ -373,6 +379,24 @@ class User_model extends CI_Model
             echo json_encode($arr);
         } else {
             $arr = array('flag' => 'empty');
+            echo json_encode($arr);
+        }
+
+    }
+    //改变订单状态
+    public function accept_order($oid){
+        $data = array(
+            'status' => "1"
+
+        );
+        $where = "oid = $oid";
+        $str = $this->db->update_string('order', $data, $where);
+        $bool = $this->db->query($str);
+        if ($bool) {
+            $arr = array('flag' => 'success');
+            echo json_encode($arr);
+        } else {
+            $arr = array('flag' => 'error');
             echo json_encode($arr);
         }
 
